@@ -1,0 +1,1 @@
+This is simply just a way for me to learn a new programming language by coding a CLI game that is near and dear to me. 
