@@ -16,30 +16,86 @@ use std::io::prelude::*;
 use std::cmp::Ordering;
 use std::path::Path;
 use std::io::Result;
+use std::thread;
+use std::collections::HashMap;
 
-static folder: &str = "gameSaves";
+static FOLDER: &str = "gameSaves";
+// static ONE_SECOND = time::Duration::from_secs(1);
+
+const SECS: u32 = 150;
+let solar_distance = HashMap::from([
+    ("Mercury", 1),
+    ("Venus", 5),
+    ("Earth", 7),
+    ("Mars", 10),
+    ("Jupiter", 16),
+    ("Saturn", 20),
+    ("Uranus", 25),
+    ("Neptune", 29),
+    ("Pluto", 36),
+    ]);
+
 
 fn main() {
+    let mut fuel = 100;
     // Create a folder that will hold game save data if one doesn't exists. DONE
     // no player account exists -> start a new game.
     // if a player account exists -> let user select saved game or start new. 
     // Allow 3 save states. 
     // If the save state is new then commit to the below statement
-    make_dir(folder);
+    make_dir(FOLDER);
 
-    println!("You are about to embark on a once in a life time journey.");
-    println!("Let's Explore.");
     println!("What is your name Captain?");
-
+    let egg = "isha";
     let mut player = String::new();
-
+    
     io::stdin().read_line(&mut player).expect("Failed To read line.");
-    let player = player.trim().parse().expect("Error parsing String");
-
-    println!("Hello, Capt. {player}");
-
-    save_game(player);
+    let player: String = player.trim().parse().expect("Error parsing String");
+    
+    save_game(player.clone());
+    // Name easter Egg. If player name is = Isha print out ascci art of "Hey Isha <3"
+    if player.to_ascii_lowercase().contains(egg) {
+      println!(r"__/\\\________/\\\_________________________________________/\\\\\\\\\\\_______________/\\\__________________________________        ");
+      thread::sleep_ms(SECS);
+      println!(r" _\/\\\_______\/\\\________________________________________\/////\\\///_______________\/\\\__________________________________       ");
+      thread::sleep_ms(SECS);
+      println!(r"  _\/\\\_______\/\\\________________________________________\/////\\\///_______________\/\\\__________________________________      ");
+      thread::sleep_ms(SECS);
+      println!(r"   _\/\\\\\\\\\\\\\\\_____/\\\\\\\\____\//\\\/\\\________________\/\\\______/\\\\\\\\\\_\/\\\__________/\\\\\\\\\______________     ");
+      thread::sleep_ms(SECS);
+      println!(r"    _\/\\\/////////\\\___/\\\/////\\\____\//\\\\\_________________\/\\\_____\/\\\//////__\/\\\\\\\\\\__\////////\\\_____________    ");
+      thread::sleep_ms(SECS);
+      println!(r"     _\/\\\_______\/\\\__/\\\\\\\\\\\______\//\\\__________________\/\\\_____\/\\\\\\\\\\_\/\\\/////\\\___/\\\\\\\\\\____________   ");
+      thread::sleep_ms(SECS);
+      println!(r"      _\/\\\_______\/\\\_\//\\///////____/\\_/\\\___________________\/\\\_____\////////\\\_\/\\\___\/\\\__/\\\/////\\\____________  ");
+      thread::sleep_ms(SECS);
+      println!(r"       _\/\\\_______\/\\\__\//\\\\\\\\\\_\//\\\\/_________________/\\\\\\\\\\\__/\\\\\\\\\\_\/\\\___\/\\\_\//\\\\\\\\/\\___________ ");
+      thread::sleep_ms(SECS);
+      println!(r"        _\///________\///____\//////////___\////__________________\///////////__\//////////__\///____\///___\////////\//____________");
+      thread::sleep_ms(SECS);
+    }
+    
+    println!("Welcome aboard, Capt. {player}");
+    println!("You are about to embark on a once in a life time journey.");
+    //println!("But before we lift off, should we go over the mission?");
+    ask_confirm("But before we lift off, should we go over the mission?");
+    // Need player input for yes or no to continue. Pair with IF statement to get rules of the game.
 }
+
+fn ask_confirm(question: &str) -> bool {
+    println!("{}", question);
+    println!("Y/n");
+    loop {
+        let mut input = [0];
+        let _ = std::io::stdin().read(&mut input);
+        match input[0] as char {
+            'y' | 'Y' => return true,
+            'n' | 'N' => return false,
+            _ => println!("Y/n only."),
+        }
+    }
+}
+
 
 fn make_dir(folder_path: &str) -> std::io::Result<()> {
     fs::create_dir_all(folder_path)?;
@@ -52,11 +108,11 @@ fn make_dir(folder_path: &str) -> std::io::Result<()> {
 //}
 
 fn save_game(username: String) {
-    let new_path = format!("./{folder}/{username}.txt"); // ./ uses a relative path, so it is required for this code to not make a folder on the users local drive and store files there.
-    println!("{}", new_path);
+    let new_path = format!("./{FOLDER}/{username}.txt"); // ./ uses a relative path, so it is required for this code to not make a folder on the users local drive and store files there.
+    //println!("{}", new_path);
     let mut data_file = File::create(new_path).expect("Creation Failed.");
 
     data_file.write("Hello, World!".as_bytes()).expect("Write Failed.");
 
-    println!("Game Saved!");
+    //println!("Game Saved!");
 }
