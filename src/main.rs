@@ -23,6 +23,8 @@ static FOLDER: &str = "gameSaves";
 // static ONE_SECOND = time::Duration::from_secs(1);
 
 const SECS: u32 = 150;
+
+// Hashmaps
 let solar_distance = HashMap::from([
     ("Mercury", 1),
     ("Venus", 5),
@@ -35,11 +37,56 @@ let solar_distance = HashMap::from([
     ("Pluto", 36),
     ]);
 
+let moon_parent = HashMap::from([
+    ("Moon", "Earth"),
+    ("Phobos", "Mars"),
+    ("Deimos", "Mars"),
+    ("Europa", "Jupiter"),
+    ("Ganymede", "Jupiter"),
+    ("Io", "Jupiter"),
+    ("Calisto", "Jupiter"),
+    ("Titan", "Saturn"),
+    ("Lapetus", "Saturn"),
+    ("Enceladus", "Saturn"),
+    ("Hyperion", "Saturn"),
+    ("Titania", "Uranus"),
+    ("Miranda", "Uranus"),
+    ("Oberon", "Uranus"),
+    ("Ariel", "Uranus"),
+    ("Triton", "Neptune"),
+    ("Thalassa", "Neptune"),
+])
+
+let moon_distance = HashMap::from([
+    ("Moon", 1),
+    ("Phobos", 1),
+    ("Deimos", 1),
+    ("Europa", 1),
+    ("Ganymede", 1),
+    ("Io", 1),
+    ("Calisto", 1),
+    ("Titan", 1),
+    ("Lapetus", 1),
+    ("Enceladus", 1),
+    ("Hyperion", 1),
+    ("Titania", 1),
+    ("Miranda", 1),
+    ("Oberon", 1),
+    ("Ariel", 1),
+    ("Triton", 1),
+    ("Thalassa", 1),
+])
+
+// need an set to keep track of all visited locations
+// need function to append visited locations to the set
+
+
 
 fn main() {
+    let mute bodies_visited = 0;
     let mut fuel = 100;
     // Create a folder that will hold game save data if one doesn't exists. DONE
-    // no player account exists -> start a new game.
+    // no player account exists -> start a new game. 
     // if a player account exists -> let user select saved game or start new. 
     // Allow 3 save states. 
     // If the save state is new then commit to the below statement
@@ -77,9 +124,7 @@ fn main() {
     
     println!("Welcome aboard, Capt. {player}");
     println!("You are about to embark on a once in a life time journey.");
-    //println!("But before we lift off, should we go over the mission?");
     ask_confirm("But before we lift off, should we go over the mission?");
-    // Need player input for yes or no to continue. Pair with IF statement to get rules of the game.
 }
 
 fn ask_confirm(question: &str) -> bool {
@@ -96,6 +141,27 @@ fn ask_confirm(question: &str) -> bool {
     }
 }
 
+fn get_Destination() {
+    // Ask user where they would like to go next,
+    // Check to see if the Destination is a planet or a moon
+    // if its a moon find its parent, 
+    // call for the distance function to get the proper fuel consumption modifier
+    
+} 
+
+fn get_fuel() {
+    // checks fuel level and returns the value back to the player
+}
+
+fn harvest_fuel() {
+    // Allows the player to harvest fuel from a planet or moon if the body is harvestable
+}
+
+fn add_location() {
+    // adds location to the set of visited locations and increments the visited locations counter by 1
+}
+
+fn 
 
 fn make_dir(folder_path: &str) -> std::io::Result<()> {
     fs::create_dir_all(folder_path)?;
